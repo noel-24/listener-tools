@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multi view</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+<style>.home-link{color:#a9ccff;white-space:nowrap;margin-right:.65rem}</style>
+</head>
+<body>
+
+<header>
+    <div class="controls"><a href="../" class="home-link">配信中一覧</a>
+        <div class="layout-selector">
+            <button id="btn-focus-one" class="layout-btn active" onclick="changeLayout('focus-one', this)">1画面 ＋ コメント欄</button>
+            <button id="btn-multi-mix" class="layout-btn" onclick="changeLayout('multi-mix', this)">画面 ＋ コメント欄</button>
+            <button id="btn-chat-only" class="layout-btn" onclick="changeLayout('chat-only', this)">コメント欄のみ</button>
+            <button id="btn-video-only" class="layout-btn" onclick="changeLayout('video-only', this)">画面のみ</button>
+        </div>
+        <div class="input-area">
+            <input type="text" id="videoTitle" class="input-title" placeholder="タブタイトル">
+            <input type="text" id="videoUrl" class="input-url" placeholder="動画ID または URL">
+            <button onclick="handleAddStreamButton()">追加</button>
+        </div>
+        <div class="header-right-btns">
+            <button class="refresh-all-btn" onclick="refreshAll()">リフレッシュ</button>
+            <button class="help-btn" onclick="toggleModal(true)" title="使い方を見る">?</button>
+        </div>
+    </div>
+</header>
+
+<div class="main-content-area mode-focus-one" id="mainContentArea">
+    <div class="main-video-theater" id="mainVideoTheater">
+        <div id="theaterPlayerPlace"></div>
+        <div class="video-touch-guard"></div>
+    </div>
+    <div class="chat-container" id="chatContainer"></div>
+</div>
+
+<div class="modal-overlay" id="helpModal" onclick="toggleModal(false)">
+    <div class="modal-window" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-title">クイックガイド</div>
+            <button class="modal-close-btn" onclick="toggleModal(false)">×</button>
+        </div>
+        <div class="modal-body">
+            <strong>■ 使い方</strong>
+            <ul>
+                <li><strong>タブタイトル：</strong> 任意入力。配信者名などを入力。</li>
+                <li><strong>ID / URL：</strong> URLか11桁のIDを入力して追加。</li>
+            </ul>
+            <div class="help-alert">
+                <strong>⚠️ チャットが表示されない場合：</strong><br>
+                「Web Server for Chrome」などのローカルサーバー環境、または公開されたWebサイト上（http:// / https://）でのみ動作します。
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
