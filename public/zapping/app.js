@@ -50,7 +50,21 @@ async function fetchOnlineLives() {
     }
 }
 
+const pauseButton = document.getElementById('pause-btn');
+function syncPlaybackButton(state) {
+    const active = state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING;
+    pauseButton.textContent = active ? '一時停止' : '再生';
+    pauseButton.disabled = !player;
+}
+pauseButton.addEventListener('click', () => {
+    if (!player || typeof player.getPlayerState !== 'function') return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) player.pauseVideo();
+    else player.playVideo();
+});
+
 function showNoLive() {
+    pauseButton.disabled = true;
     loadingOverlay.classList.add('hidden');
     liveTitle.textContent = "😢 現在ライブ配信中のチャンネルはありません。";
     if (player) { player.destroy(); player = null; }
@@ -104,11 +118,13 @@ function initOrUpdatePlayer(index) {
             },
             events: {
                 onReady: (event) => {
+                    syncPlaybackButton(event.target.getPlayerState());
                     event.target.unMute(); 
                     event.target.setVolume(currentVolume);
                     event.target.playVideo();
                 },
                 onStateChange: (event) => {
+                    syncPlaybackButton(event.data);
                     if (event.data === YT.PlayerState.PLAYING) {
                         event.target.unMute();
                         event.target.setVolume(volumeSlider.value);
